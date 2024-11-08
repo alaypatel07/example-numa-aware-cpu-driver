@@ -15,7 +15,7 @@
 GOLANG_VERSION ?= 1.23.1
 
 DRIVER_NAME := example-numa-aware-cpu-driver
-MODULE := sigs.k8s.io/$(DRIVER_NAME)
+MODULE := $(DRIVER_NAME)
 
 VERSION  ?= v0.1.0
 vVERSION := v$(VERSION:v%=%)

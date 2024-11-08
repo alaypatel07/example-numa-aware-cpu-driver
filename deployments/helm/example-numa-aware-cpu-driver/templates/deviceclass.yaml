@@ -2,8 +2,8 @@
 apiVersion: resource.k8s.io/v1alpha3
 kind: DeviceClass
 metadata:
-  name: gpu.example.com
+  name: cpu.nvidia.com
 spec:
   selectors:
   - cel: 
-      expression: "device.driver == 'gpu.example.com'"
+      expression: "device.driver == 'cpu.nvidia.com'"

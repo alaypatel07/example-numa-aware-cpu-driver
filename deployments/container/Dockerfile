@@ -34,4 +34,4 @@ LABEL release="N/A"
 LABEL summary="Example DRA resource driver for Kubernetes"
 LABEL description="See summary"
 
-COPY --from=build /artifacts/example-numa-aware-cpu-driver /usr/bin/example-numa-aware-cpu-driver
+COPY --from=build /artifacts/example-numa-aware-cpu-kubeletplugin /usr/bin/example-numa-aware-cpu-kubeletplugin
