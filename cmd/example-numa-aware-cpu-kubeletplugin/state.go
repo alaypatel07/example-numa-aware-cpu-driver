@@ -128,7 +128,7 @@ func (s *DeviceState) Prepare(claim *resourceapi.ResourceClaim) ([]*drapbv1.Devi
 		return nil, fmt.Errorf("prepare failed: %v", err)
 	}
 
-	if err = s.cdi.CreateClaimSpecFile(claimUID, preparedDevices, *containerEdit); err != nil {
+	if err = s.cdi.CreateClaimSpecFile(claimUID, preparedDevices, containerEdit); err != nil {
 		return nil, fmt.Errorf("unable to create CDI spec file for claim: %v", err)
 	}
 
@@ -192,6 +192,7 @@ func (s *DeviceState) prepareDevices(claim *resourceapi.ResourceClaim) (Prepared
 				DeviceName:   result.Device,
 				CDIDeviceIDs: s.cdi.GetClaimDevices(string(claim.UID), []string{result.Device}),
 			},
+			ContainerEdits: &cdiapi.ContainerEdits{containerEdit},
 		}
 		preparedDevices = append(preparedDevices, device)
 	}
@@ -209,7 +210,7 @@ func (s *DeviceState) filterDevicesForDriver(statusDevices []resourceapi.DeviceR
 	return driverFilteredDevices
 }
 
-func (s *DeviceState) unprepareDevices(claimUID string, devices PreparedDevices) error {
+func (s *DeviceState) unprepareDevices(_ string, _ PreparedDevices) error {
 	return nil
 }
 
@@ -230,7 +231,7 @@ func (s *DeviceState) applyConfig(claim *resourceapi.ResourceClaim, results []re
 	}
 
 	envs := []string{
-		fmt.Sprintf("CPU_%s=%s", claim.Name, strings.Join(threadIDs, ",")),
+		fmt.Sprintf("CPU='%s'", strings.Join(threadIDs, ":")),
 	}
 
 	return &cdispec.ContainerEdits{

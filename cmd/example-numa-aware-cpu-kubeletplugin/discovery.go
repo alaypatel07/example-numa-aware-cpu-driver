@@ -19,7 +19,6 @@ package main
 import (
 	"fmt"
 	resourceapi "k8s.io/api/resource/v1alpha3"
-	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/utils/ptr"
 )
 
@@ -60,12 +59,6 @@ func enumerateAllCPUDevices() (AllocatableDevices, error) {
 					"dra.nvidia.com/numa": {
 						IntValue: ptr.To(numaNode),
 					},
-					"driverVersion": {
-						VersionValue: ptr.To("1.0.0"),
-					},
-				},
-				Capacity: map[resourceapi.QualifiedName]resource.Quantity{
-					"memory": resource.MustParse("80Gi"),
 				},
 			},
 		}

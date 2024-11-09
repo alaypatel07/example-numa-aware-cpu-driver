@@ -81,7 +81,7 @@ func (cdi *CDIHandler) CreateCommonSpecFile() error {
 	return cdi.cache.WriteSpec(spec, specName)
 }
 
-func (cdi *CDIHandler) CreateClaimSpecFile(claimUID string, devices PreparedDevices, containerEdits cdispec.ContainerEdits) error {
+func (cdi *CDIHandler) CreateClaimSpecFile(claimUID string, devices PreparedDevices, containerEdits *cdispec.ContainerEdits) error {
 	specName := cdiapi.GenerateTransientSpecName(cdiVendor, cdiClass, claimUID)
 
 	spec := &cdispec.Spec{
@@ -91,7 +91,8 @@ func (cdi *CDIHandler) CreateClaimSpecFile(claimUID string, devices PreparedDevi
 
 	for _, device := range devices {
 		cdiDevice := cdispec.Device{
-			Name: fmt.Sprintf("%s-%s", claimUID, device.DeviceName),
+			Name:           fmt.Sprintf("%s-%s", claimUID, device.DeviceName),
+			ContainerEdits: cdispec.ContainerEdits{Env: []string{"dummy=foo"}},
 		}
 
 		spec.Devices = append(spec.Devices, cdiDevice)
@@ -102,7 +103,7 @@ func (cdi *CDIHandler) CreateClaimSpecFile(claimUID string, devices PreparedDevi
 		return fmt.Errorf("failed to get minimum required CDI spec version: %v", err)
 	}
 	spec.Version = minVersion
-	spec.ContainerEdits = containerEdits
+	spec.ContainerEdits = *containerEdits
 
 	return cdi.cache.WriteSpec(spec, specName)
 }
